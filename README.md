@@ -1,4 +1,4 @@
-# Project Title
+# SQL Alchemy Challenge
 Rutgers Bootcamp Challenge 10 - SQLAlchemy
 
 ## Description
