@@ -8,7 +8,7 @@ Prompt: To help with trip planning to Honolulu, Hawaii, I will do a climate anal
 1. Clone the repository
 3. Install dependencies (ie. SQLAlchemy ORM queries, Pandas, and Matplotlib)
 4. Run jupyter file for set-up and analysis.
-5. Run app.py to get json version of information from jupyter file.
+5. Run app.py to get json version of information from jupyter file. Use outlined routes to get to desired information. <br> NOTE: must navigate to currect directory in terminal to utilize app.py. start dates are in format "[ENTER CORRECT FORMAT HERE]".
 
 ## Acknowledgments
 - Used Xpert Learning Assistant for assistance debugging.
