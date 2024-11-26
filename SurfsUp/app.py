@@ -38,7 +38,7 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/(input start date)<br/>"
+        f"/api/v1.0/(input start date --in format YYYY-MM-DD)<br/>"
         f"/api/v1.0/(input start date)/(input end date)"
     )
 
@@ -168,11 +168,20 @@ def start(start):
     return jsonify(temp_dict_start)
 
 @app.route("/api/v1.0/<start>/<end>")
-def start_end(start_date, end_date):
+def start_end(start, end):
     """Return temperature stats for a specficied\
         date range"""
     # Create our session (link) from Python to the DB
     session = Session(engine)
+     
+     # Check if the date exists in the database
+    start_date_exists = session.query(measurement.date).filter(measurement.date == start).first()
+    if not start_date_exists:
+        return jsonify({"error": "No temperature data available for the given start date."})
+    
+    end_date_exists = session.query(measurement.date).filter(measurement.date == end).first()
+    if not end_date_exists:
+        return jsonify({"error": "No temperature data available for the given end date."})
      # Query to calculate the lowest, highest, and average \
      # temperatures at date range selected
     temperature_stats_start_end = session.query(
@@ -182,8 +191,8 @@ def start_end(start_date, end_date):
         func.avg(measurement.tobs)
         ).join(station, measurement.station == station.station
                ).filter(
-        measurement.date >= start_date,
-        measurement.date <= end_date
+        measurement.date >= start,
+        measurement.date <= end
         # Group by station name to get stats for each station
         ).group_by(station.name).all()
     session.close()
