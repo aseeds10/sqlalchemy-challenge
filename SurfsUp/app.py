@@ -17,7 +17,6 @@ engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 Base = automap_base()
 # reflect the tables
 Base.prepare(autoload_with=engine)
-# Base.prepare(engine, reflect=True)
 
 # Save references to each table
 station = Base.classes.station
@@ -87,11 +86,6 @@ def stations():
         f"Station Name: {name}, Station ID: {station_id}, Count: {count}" 
         for name, station_id, count in most_active_stations
     ]
-
-    # formatted_stations = [
-    #     f"Station ID: {station_id}, Count: {count}" 
-    #     for station_id, count in most_active_stations
-    # ]
 
     return jsonify(formatted_stations)
 
