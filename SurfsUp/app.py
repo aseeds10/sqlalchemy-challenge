@@ -126,11 +126,16 @@ def temperature():
     return jsonify(all_temps)
 
 @app.route("/api/v1.0/<start>")
-def start(start_date):
+def start(start):
     """Return temperature stats for a specficied\
         start date"""
     # Create our session (link) from Python to the DB
     session = Session(engine)
+
+    # Check if the date exists in the database
+    date_exists = session.query(measurement.date).filter(measurement.date == start).first()
+    if not date_exists:
+        return jsonify({"error": "No temperature data available for the given date."})
 
      # Query to calculate the lowest, highest, and average \
      # temperatures at start date
@@ -141,7 +146,7 @@ def start(start_date):
         func.avg(measurement.tobs)
         ).join(station, measurement.station == station.station
                ).filter(
-                   measurement.date >= start_date
+                   measurement.date >= start
                    # Group by station name to get stats for each station
                    ).group_by(station.name).all()
     session.close()
